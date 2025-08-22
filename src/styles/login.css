@@ -1,0 +1,78 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main--auth {
+    height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#title {
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.logo--login {
+    width: 60px;
+    height: 60px;
+}
+
+.div--form form {
+    padding: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.div--form{
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #C1C1C1;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+}
+
+
+.section--input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section--input input {
+    width: 300px;
+    height: 40px;
+    padding: 5px;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+}
+
+.section--button--login {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.section--button--login button {
+    padding: 5px 30px;
+    background-color: #165fdd;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: #0e54cb;
+    }
+}

@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.section--search form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.section--search {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.section--search input {
+    padding: 5px;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+}
+
+.section--search button {
+    padding: 5px 10px;
+    border: 1px solid #62a6f8;
+    background-color: #d4e7ff;
+    color: #0c4489;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #c5dcf7;
+    }
+
+}
+
+.on--back {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.icon--back {
+    cursor: pointer;
+}
+
+h2 {
+    text-align: center;
+}
+
+.form {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #C1C1C1;
+    justify-self: center;
+}
+
+.card--form {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.card--form input {
+    width: 330px;
+    height: 40px;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.card--form select {
+    width: 330px;
+    height: 40px;
+    border: 1px solid #C1C1C1;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.button--option {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button--option button[type="submit"] {
+    padding: 5px 20px;
+    border: none;
+    background-color: #195bab;
+    color: #FFF;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #0b4891;
+    }
+}
+
+.button--option button[type="button"] {
+    padding: 5px 20px;
+    border: none;
+    background-color: #e4e4e4;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #d4d1d1;
+    }
+}
+
+.nav--option {
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.button--niños {
+    padding: 5px 20px;
+    background-color: #195bab;
+    color: #FFF;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    &:hover {
+        background-color: #1051a1;
+    }
+}
+
+@media (max-width: 500px) {
+    .card--form input {
+        width: 100%;
+        max-width: 330px;
+    }
+
+    .card--form select {
+        width: 100%;
+        max-width: 330px;
+    }
+}

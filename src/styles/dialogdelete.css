@@ -1,0 +1,78 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.dialog {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 10px;
+    width: 310px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.div--loading {
+    width: 295px;
+    border: 1px solid #C1C1C1;
+    background-color: #f6f6f6;
+    border-radius: 10px;
+}
+
+.div--parrafos h5 {
+    font-size: 15px;
+}
+
+.div--parrafos p {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 100;
+    font-family: 'Times New Roman', Times, serif;
+    color: #868686;
+}
+
+
+.nav--dialog {
+    width: 100%;
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button--cancel {
+    border: none;
+    background-color: #f6f6f6;
+    padding: 5px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    &:hover {
+        background-color: #ebeaea;
+    }
+}
+.button--delete {
+    border: none;
+    background-color: #ffc5c5;
+    color: #b50d0d;
+    padding: 5px 20px;
+    font-weight: 500;
+    border-radius: 5px;
+    &:hover {
+        background-color: #ffcdcd;
+    }
+}
