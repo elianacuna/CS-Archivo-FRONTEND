@@ -5,32 +5,25 @@ import { Alert, AlertTitle } from '@mui/material';
 import Loading from '../../components/Loading.jsx';
 import AlertDialogDelete from "../../components/dialog/AlertDialogDelete.jsx";
 import { Menu, MenuItem } from '@mui/material';
-import AlertDialogDeletNiño from '../../components/dialog/AlertDialogDeleteNiño.jsx';
+import AlertDialogDeleteConsultaGeneral from '../../components/dialog/AlertDialogDeleteConsulta.jsx';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 import '../../styles/global.css';
 import '../../styles/usuario.css';
 
-const Niños = () => {
+const Paciente = () => {
     {/* Variables */ }
     const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
 
-    //filtro
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-
-
     const [busqueda, setBusqueda] = useState('');
-    const [edad, setEdad] = useState('17');
-    const [niños, setNiños] = useState([]);
+    const [paciente, setPaciente] = useState([]);
     const [lugares, setLugares] = useState([]);
     const [formPaciente, setFormPaciente] = useState({
         id_paciente: "",
@@ -45,12 +38,12 @@ const Niños = () => {
         fk_id_lugares: ""
     });
 
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
+
     const [view, setView] = useState(true);
     const [add, setAdd] = useState(false);
     const [edit, setEdit] = useState(false);
-
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [selectedId, setSelectedId] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [alert, setAlert] = useState({ show: false, severity: '', message: '' });
@@ -64,35 +57,26 @@ const Niños = () => {
 
     {/* use Effect */ }
     useEffect(() => {
-        obtnerPacientes(busqueda, edad);
+        obttenerPaciente(busqueda);
         obtenerLugar();
     }, [])
 
 
     {/* obtener listado */ }
-    const obtnerPacientes = async (busqueda, edad) => {
-        try {
-            const response = await fetch(`${API_URL}ninios/busqueda`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ busqueda: busqueda, edad: edad })
-            })
+    const obttenerPaciente = async (busqueda) => {
+        const respone = await fetch(`${API_URL}consulta/general/busqueda`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ busqueda: busqueda })
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-
-                showAlert('success', `${data.message}`);
-
-                setNiños(data.ninios);
-                return true;
-            } else {
-                const data = await response.json();
-                showAlert('error', `${data.message}`);
-                return false;
-            }
-        } catch (error) {
-            setIsLoading(false);
-            showAlert('error', `Hubo un error: ${error.message}`);
+        if (respone.ok) {
+            const data = await respone.json();
+            setPaciente(data.consultageneral);
+            return true;
+        } else {
+            const data = await respone.json();
+            console.error(data.message);
         }
     };
     const obtenerLugar = async () => {
@@ -106,8 +90,6 @@ const Niños = () => {
             return false;
         }
     };
-    const verifyDay = new Date().toISOString().split('T')[0];
-
 
     {/* CRUD */ }
     const crearPaciente = async () => {
@@ -119,7 +101,7 @@ const Niños = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}ninios`, {
+            const response = await fetch(`${API_URL}consulta/general`, {
                 method: 'POST',
                 headers: ({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
@@ -148,11 +130,11 @@ const Niños = () => {
                         fk_id_lugares: ""
                     });
 
-                    obtnerPacientes(busqueda, edad);
-
                     setView(true);
                     setEdit(false);
                     setAdd(false);
+
+                    obttenerPaciente(busqueda);
                 }, 3000);
             } else {
                 const data = await response.json();
@@ -176,7 +158,7 @@ const Niños = () => {
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}ninios/${id_paciente}`, {
+            const response = await fetch(`${API_URL}consulta/general/${id_paciente}`, {
                 method: 'PUT',
                 headers: ({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
@@ -204,7 +186,7 @@ const Niños = () => {
                         fk_id_lugares: ""
                     });
 
-                    obtnerPacientes(busqueda, edad);
+                    obttenerPaciente(busqueda);
 
                     setView(true);
                     setEdit(false);
@@ -225,13 +207,14 @@ const Niños = () => {
         }
     };
     const deleteUsuario = async (id) => {
-        
+
         setSelectedId(id);
         setOpenDeleteDialog(true);
-    };
+    }
 
 
     {/* editar, agregar o eliminar */ }
+    const verifyDay = new Date().toISOString().split('T')[0];
     const calcularEdad = (isoDate) => {
         if (!isoDate) return "";
         const [y, m, d] = isoDate.split('-').map(Number);
@@ -269,21 +252,30 @@ const Niños = () => {
             year: 'numeric'
         });
     };
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const handleSelectEdad = (value) => {
-        setEdad(value);
-        setAnchorEl(null);
-        // opcional: ejecutar búsqueda de inmediato
-        obtnerPacientes(busqueda.trim(), value);
+    const handleEdit = (id) => {
+        const consultageneral = paciente.find((cg => cg.id_paciente === id))
+
+        if (consultageneral) {
+            setFormPaciente({
+                id_paciente: consultageneral.id_paciente,
+                num_expediente: consultageneral.num_expediente,
+                nombre_completo: consultageneral.nombre_completo,
+                direccion_exacta: consultageneral.direccion_exacta,
+                fecha_nacimiento: consultageneral.fecha_nacimiento,
+                edad: consultageneral.edad,
+                cui: consultageneral.cui,
+                numero_telefono: consultageneral.numero_telefono,
+                fk_id_lugares: consultageneral.fk_id_lugares
+            });
+
+            setView(false);
+            setEdit(true);
+            setAdd(false);
+        }
     };
     const handleAdd = () => {
-        setAdd(true);
         setView(false);
+        setAdd(true);
         setEdit(false);
     };
     const handleCancel = () => {
@@ -304,31 +296,9 @@ const Niños = () => {
             fk_id_lugares: ""
         });
     };
-    const handleEdit = (id) => {
-        const paciente = niños.find((n => n.id_paciente === id))
-
-        if (paciente) {
-            setFormPaciente({
-                id_paciente: paciente.id_paciente,
-                num_expediente: paciente.num_expediente,
-                nombre_completo: paciente.nombre_completo,
-                direccion_exacta: paciente.direccion_exacta,
-                edad: paciente.edad,
-                fecha_nacimiento: paciente.fecha_nacimiento,
-                cui: paciente.cui,
-                numero_telefono: paciente.numero_telefono,
-                fk_id_lugares: paciente.fk_id_lugares
-            });
-
-            setView(false);
-            setEdit(true);
-            setAdd(false);
-        }
-    };
 
     return (
         <div className="contaniner">
-
             <Sidebar />
 
             <main className="main">
@@ -338,12 +308,24 @@ const Niños = () => {
                     {view && (
                         <div>
 
+                            <AlertDialogDeleteConsultaGeneral
+                                open={openDeleteDialog}
+                                id={selectedId}
+                                onCancel={() => setOpenDeleteDialog(false)}
+                                onConfirm={(msg) => {
+                                    setOpenDeleteDialog(false);
+                                    showAlert('success', msg || 'Usuario eliminado correctamente');
+                                    obttenerPaciente(busqueda);
+                                }}
+                            />
+
                             <section className="section--search">
                                 <form
                                     onSubmit={(e) => {
                                         e.preventDefault();
-                                        obtnerPacientes(busqueda.trim(), edad);
+                                        obttenerPaciente(busqueda.trim());
                                     }}>
+
                                     <input
                                         type="search"
                                         value={busqueda}
@@ -351,37 +333,22 @@ const Niños = () => {
                                         placeholder="Buscar por nombre, cui"
                                     />
 
-                                    <div>
-                                        <Tooltip title="Filtrar por edad">
-                                            <IconButton onClick={handleClick}>
-                                                <FilterListIcon />
-                                            </IconButton>
-                                        </Tooltip>
+                                    <nav>
+                                        <button type="button" onClick={handleAdd}>
+                                            Agregar paciente
+                                        </button>
+                                    </nav>
 
-                                        <Menu
-                                            anchorEl={anchorEl}
-                                            open={open}
-                                            onClose={handleClose}
-                                        >
-                                            <MenuItem onClick={() => handleSelectEdad('5')}>5 años</MenuItem>
-                                            <MenuItem onClick={() => handleSelectEdad('17')}>17 años</MenuItem>
-                                        </Menu>
-                                    </div>
                                 </form>
+
+
+
                             </section>
 
-                            <nav className="nav--option">
-                                <button type="button" className="button--niños"
-                                    onClick={handleAdd}>
-                                    Agregar paciente
-                                </button>
-                            </nav>
-
                             <section className="tabla--responsiva">
+
                                 <table>
-
                                     <thead>
-
                                         <tr>
                                             <th>ID</th>
                                             <th>Expediente</th>
@@ -399,31 +366,31 @@ const Niños = () => {
                                     <tbody>
                                         {isLoading ? (
                                             <tr><td colSpan="10" style={{ textAlign: 'center', padding: '1rem' }}>Cargando…</td></tr>
-                                        ) : (niños?.length ?? 0) === 0 ? (
+                                        ) : (paciente?.length ?? 0) === 0 ? (
                                             <tr><td colSpan="10" style={{ textAlign: 'center', padding: '1rem' }}>No se encontraron pacientes</td></tr>
                                         ) : (
-                                            niños.map((n, i) => (
-                                                <tr key={n.id_paciente ?? i}>
+                                            paciente.map((p, i) => (
+                                                <tr key={p.id_paciente ?? i}>
                                                     <td>{i + 1}</td>
-                                                    <td>{n.num_expediente}</td>
-                                                    <td>{n.nombre_completo}</td>
-                                                    <td>{n.direccion_exacta}</td>
-                                                    <td>{n.edad}</td>
-                                                    <td>{formatDate(n.fecha_nacimiento)}</td>
-                                                    <td>{n.cui}</td>
-                                                    <td>{n.numero_telefono}</td>
-                                                    <td>{formatDate(n.fecha_inscripcion)}</td>
-                                                    <td>{n.lugar}</td>
+                                                    <td>{p.num_expediente}</td>
+                                                    <td>{p.nombre_completo}</td>
+                                                    <td>{p.direccion_exacta}</td>
+                                                    <td>{p.edad}</td>
+                                                    <td>{formatDate(p.fecha_nacimiento)}</td>
+                                                    <td>{p.cui}</td>
+                                                    <td>{p.numero_telefono}</td>
+                                                    <td>{formatDate(p.fecha_inscripcion)}</td>
+                                                    <td>{p.lugar}</td>
                                                     <td>
 
                                                         <Tooltip title="Editar">
-                                                            <IconButton color="primary" onClick={() => { handleEdit(n.id_paciente) }}>
+                                                            <IconButton color="primary" onClick={() => { handleEdit(p.id_paciente) }}>
                                                                 <ModeEditOutlineOutlinedIcon />
                                                             </IconButton>
                                                         </Tooltip>
 
                                                         <Tooltip title="Delete">
-                                                            <IconButton color="error" onClick={() => { deleteUsuario(n.id_paciente) }}>
+                                                            <IconButton color="error" onClick={() => { deleteUsuario(p.id_paciente) }}>
                                                                 <DeleteIcon />
                                                             </IconButton>
                                                         </Tooltip>
@@ -435,22 +402,11 @@ const Niños = () => {
                                 </table>
                             </section>
 
-                            <AlertDialogDeletNiño
-                                open={openDeleteDialog}
-                                id={selectedId}
-                                onCancel={() => setOpenDeleteDialog(false)}
-                                onConfirm={(msg) => {
-                                    setOpenDeleteDialog(false);
-                                    showAlert('success', msg || 'Usuario eliminado correctamente');
-                                    obtnerPacientes(busqueda, edad);
-                                }}
-                            />
                         </div>
                     )}
 
                     {edit && (
                         <div>
-
                             <section className="card--option">
                                 <nav className="on--back">
                                     <ArrowBackIcon onClick={handleCancel} className="icon--back" />
@@ -579,7 +535,6 @@ const Niños = () => {
                                             <Loading />
                                         </div>
                                     )}
-
                                 </form>
                             </section>
                         </div>
@@ -732,11 +687,11 @@ const Niños = () => {
                         </div>
                     )}
                 </div>
-
             </main>
         </div>
     )
-
 }
 
-export default Niños;
+
+
+export default Paciente;

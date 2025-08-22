@@ -6,9 +6,9 @@ import Main from "./routes/Main";
 import Login from "./routes/auth/login";
 import Ajustes from "./routes/ajustes/ajustes.jsx";
 import Niños from "./routes/niños/niños.jsx";
+import Paciente from "./routes/pacientes/pacientes.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
-
 
 function App() {
   return (
@@ -40,6 +40,13 @@ function App() {
           element={
             <ProtectedRoute>
               <Niños />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/pacientes"
+          element={
+            <ProtectedRoute>
+              <Paciente />
             </ProtectedRoute>
           } />
 
