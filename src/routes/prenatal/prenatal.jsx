@@ -175,7 +175,7 @@ const Prenatal = () => {
                 body: JSON.stringify({
                     num_expediente, nombre_completo, direccion_exacta,
                     edad, fecha_nacimiento, cui, numero_telefono,
-                    fk_id_lugares, fecha_probable_parto, 
+                    fk_id_lugares, fecha_probable_parto,
                     primer_control_post_parto, segundo_control_post_parto
                 })
             });
@@ -277,19 +277,35 @@ const Prenatal = () => {
         const prenatal = paciente.find((p => p.id_paciente === id));
 
         if (prenatal) {
+            const fechaNacimiento = prenatal.fecha_nacimiento
+                ? new Date(prenatal.fecha_nacimiento).toISOString().split("T")[0]
+                : "";
+
+            const fechaParto = prenatal.fecha_probable_parto
+                ? new Date(prenatal.fecha_probable_parto).toISOString().split("T")[0]
+                : "";
+
+            const fechaPrimer = prenatal.primer_control_post_parto
+                ? new Date(prenatal.primer_control_post_parto).toISOString().split("T")[0]
+                : "";
+            
+            const fechaSegundo = prenatal.segundo_control_post_parto
+                ? new Date(prenatal.segundo_control_post_parto).toISOString().split("T")[0]
+                : "";
+
             setFormPaciente({
                 id_paciente: prenatal.id_paciente,
                 num_expediente: prenatal.num_expediente,
                 nombre_completo: prenatal.nombre_completo,
                 direccion_exacta: prenatal.direccion_exacta,
-                fecha_nacimiento: prenatal.fecha_nacimiento,
+                fecha_nacimiento: fechaNacimiento,
                 edad: prenatal.edad,
                 cui: prenatal.cui,
                 numero_telefono: prenatal.numero_telefono,
                 fk_id_lugares: prenatal.fk_id_lugares,
-                fecha_probable_parto: prenatal.fecha_probable_parto,
-                primer_control_post_parto: prenatal.primer_control_post_parto,
-                segundo_control_post_parto: prenatal.segundo_control_post_parto
+                fecha_probable_parto: fechaParto,
+                primer_control_post_parto: fechaPrimer,
+                segundo_control_post_parto: fechaSegundo
             });
 
             setView(false);
@@ -730,7 +746,7 @@ const Prenatal = () => {
                                             name="primer_control_post_parto"
                                             value={formPaciente.primer_control_post_parto}
                                             onChange={handleChange}
-                                            
+
                                         />
                                     </section>
 

@@ -73,6 +73,7 @@ const Paciente = () => {
         if (respone.ok) {
             const data = await respone.json();
             setPaciente(data.consultageneral);
+            console.table(data.consultageneral);
             return true;
         } else {
             const data = await respone.json();
@@ -256,12 +257,18 @@ const Paciente = () => {
         const consultageneral = paciente.find((cg => cg.id_paciente === id))
 
         if (consultageneral) {
+
+            const fechaNacimiento = consultageneral.fecha_nacimiento
+                ? new Date(consultageneral.fecha_nacimiento).toISOString().split("T")[0]
+                : "";
+
+            
             setFormPaciente({
                 id_paciente: consultageneral.id_paciente,
                 num_expediente: consultageneral.num_expediente,
                 nombre_completo: consultageneral.nombre_completo,
                 direccion_exacta: consultageneral.direccion_exacta,
-                fecha_nacimiento: consultageneral.fecha_nacimiento,
+                fecha_nacimiento: fechaNacimiento,
                 edad: consultageneral.edad,
                 cui: consultageneral.cui,
                 numero_telefono: consultageneral.numero_telefono,

@@ -308,13 +308,17 @@ const Niños = () => {
         const paciente = niños.find((n => n.id_paciente === id))
 
         if (paciente) {
+            const fechaNacimiento = paciente.fecha_nacimiento
+                ? new Date(paciente.fecha_nacimiento).toISOString().split("T")[0]
+                : "";
+
             setFormPaciente({
                 id_paciente: paciente.id_paciente,
                 num_expediente: paciente.num_expediente,
                 nombre_completo: paciente.nombre_completo,
                 direccion_exacta: paciente.direccion_exacta,
                 edad: paciente.edad,
-                fecha_nacimiento: paciente.fecha_nacimiento,
+                fecha_nacimiento: fechaNacimiento,
                 cui: paciente.cui,
                 numero_telefono: paciente.numero_telefono,
                 fk_id_lugares: paciente.fk_id_lugares
