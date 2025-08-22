@@ -5,7 +5,7 @@ import { Alert, AlertTitle } from '@mui/material';
 import Loading from '../../components/Loading.jsx';
 import AlertDialogDelete from "../../components/dialog/AlertDialogDelete.jsx";
 import { Menu, MenuItem } from '@mui/material';
-import AlertDialogDeleteConsultaGeneral from '../../components/dialog/AlertDialogDeleteConsulta.jsx';
+import AlertDialogDeletePrenatal from '../../components/dialog/AlertDialogDeletePrenatal.jsx';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +17,7 @@ import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutl
 import '../../styles/global.css';
 import '../../styles/usuario.css';
 
-const Paciente = () => {
+const Prenatal = () => {
     {/* Variables */ }
     const API_URL = import.meta.env.VITE_API_URL;
     const navigate = useNavigate();
@@ -35,7 +35,10 @@ const Paciente = () => {
         cui: "",
         numero_telefono: "",
         fecha_inscripcion: "",
-        fk_id_lugares: ""
+        fk_id_lugares: "",
+        fecha_probable_parto: "",
+        primer_control_post_parto: "",
+        segundo_control_post_parto: ""
     });
 
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
@@ -57,14 +60,14 @@ const Paciente = () => {
 
     {/* use Effect */ }
     useEffect(() => {
-        obttenerPaciente(busqueda);
+        obtenerPaciente(busqueda);
         obtenerLugar();
     }, [])
 
 
     {/* obtener listado */ }
-    const obttenerPaciente = async (busqueda) => {
-        const respone = await fetch(`${API_URL}consulta/general/busqueda`, {
+    const obtenerPaciente = async (busqueda) => {
+        const respone = await fetch(`${API_URL}prenatal/busqueda`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ busqueda: busqueda })
@@ -72,7 +75,7 @@ const Paciente = () => {
 
         if (respone.ok) {
             const data = await respone.json();
-            setPaciente(data.consultageneral);
+            setPaciente(data.prenatal);
             return true;
         } else {
             const data = await respone.json();
@@ -91,29 +94,31 @@ const Paciente = () => {
         }
     };
 
+
     {/* CRUD */ }
     const crearPaciente = async () => {
         const {
             num_expediente, nombre_completo, direccion_exacta, edad,
             fecha_nacimiento, cui, numero_telefono, fecha_inscripcion,
-            fk_id_lugares
+            fk_id_lugares, primer_control_post_parto, segundo_control_post_parto,
+            fecha_probable_parto
         } = formPaciente;
 
         setIsLoading(true);
         try {
-            const response = await fetch(`${API_URL}consulta/general`, {
+            const response = await fetch(`${API_URL}prenatal`, {
                 method: 'POST',
                 headers: ({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
                     num_expediente, nombre_completo, direccion_exacta,
                     edad, fecha_nacimiento, cui, numero_telefono,
-                    fecha_inscripcion, fk_id_lugares
+                    fecha_inscripcion, fk_id_lugares, fecha_probable_parto,
+                    primer_control_post_parto, segundo_control_post_parto
                 })
             });
 
             if (response.ok) {
                 const data = await response.json();
-
                 showAlert('success', `${data.message}`)
 
                 setTimeout(() => {
@@ -127,15 +132,18 @@ const Paciente = () => {
                         cui: "",
                         numero_telefono: "",
                         fecha_inscripcion: "",
-                        fk_id_lugares: ""
+                        fk_id_lugares: "",
+                        fecha_probable_parto: "",
+                        primer_control_post_parto: "",
+                        segundo_control_post_parto: ""
                     });
+
+                    obtenerPaciente(busqueda);
 
                     setView(true);
                     setEdit(false);
                     setAdd(false);
-
-                    obttenerPaciente(busqueda);
-                }, 3000);
+                })
             } else {
                 const data = await response.json();
 
@@ -143,6 +151,7 @@ const Paciente = () => {
 
                 return false;
             }
+
         } catch (error) {
             setIsLoading(false);
             showAlert('error', `Hubo un error: ${error.message}`);
@@ -153,18 +162,21 @@ const Paciente = () => {
     const updatePaciente = async () => {
         const {
             id_paciente, num_expediente, nombre_completo, direccion_exacta, edad,
-            fecha_nacimiento, cui, numero_telefono, fk_id_lugares
+            fecha_nacimiento, cui, numero_telefono, fk_id_lugares, fecha_probable_parto,
+            primer_control_post_parto, segundo_control_post_parto
         } = formPaciente;
 
         setIsLoading(true);
+
         try {
-            const response = await fetch(`${API_URL}consulta/general/${id_paciente}`, {
+            const response = await fetch(`${API_URL}prenatal/${id_paciente}`, {
                 method: 'PUT',
                 headers: ({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
                     num_expediente, nombre_completo, direccion_exacta,
                     edad, fecha_nacimiento, cui, numero_telefono,
-                    fk_id_lugares
+                    fk_id_lugares, fecha_probable_parto, 
+                    primer_control_post_parto, segundo_control_post_parto
                 })
             });
 
@@ -183,34 +195,38 @@ const Paciente = () => {
                         cui: "",
                         numero_telefono: "",
                         fecha_inscripcion: "",
-                        fk_id_lugares: ""
+                        fk_id_lugares: "",
+                        fecha_probable_parto: "",
+                        primer_control_post_parto: "",
+                        segundo_control_post_parto: ""
                     });
 
-                    obttenerPaciente(busqueda);
+                    obtenerPaciente(busqueda);
 
                     setView(true);
                     setEdit(false);
                     setAdd(false);
-                }, 3000);
+                }, 30000);
 
                 return true;
             } else {
                 const data = await response.json();
                 showAlert('error', `${data.message}`)
-
+                console.error(data.message);
                 return false;
             }
         } catch (error) {
             showAlert('error', `Hubo un error: ${error.message}`);
+            console.error(error.message);
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
     };
     const deleteUsuario = async (id) => {
 
         setSelectedId(id);
         setOpenDeleteDialog(true);
-    }
+    };
 
 
     {/* editar, agregar o eliminar */ }
@@ -252,31 +268,34 @@ const Paciente = () => {
             year: 'numeric'
         });
     };
+    const handleAdd = () => {
+        setView(false);
+        setAdd(true);
+        setEdit(false);
+    };
     const handleEdit = (id) => {
-        const consultageneral = paciente.find((cg => cg.id_paciente === id))
+        const prenatal = paciente.find((p => p.id_paciente === id));
 
-        if (consultageneral) {
+        if (prenatal) {
             setFormPaciente({
-                id_paciente: consultageneral.id_paciente,
-                num_expediente: consultageneral.num_expediente,
-                nombre_completo: consultageneral.nombre_completo,
-                direccion_exacta: consultageneral.direccion_exacta,
-                fecha_nacimiento: consultageneral.fecha_nacimiento,
-                edad: consultageneral.edad,
-                cui: consultageneral.cui,
-                numero_telefono: consultageneral.numero_telefono,
-                fk_id_lugares: consultageneral.fk_id_lugares
+                id_paciente: prenatal.id_paciente,
+                num_expediente: prenatal.num_expediente,
+                nombre_completo: prenatal.nombre_completo,
+                direccion_exacta: prenatal.direccion_exacta,
+                fecha_nacimiento: prenatal.fecha_nacimiento,
+                edad: prenatal.edad,
+                cui: prenatal.cui,
+                numero_telefono: prenatal.numero_telefono,
+                fk_id_lugares: prenatal.fk_id_lugares,
+                fecha_probable_parto: prenatal.fecha_probable_parto,
+                primer_control_post_parto: prenatal.primer_control_post_parto,
+                segundo_control_post_parto: prenatal.segundo_control_post_parto
             });
 
             setView(false);
             setEdit(true);
             setAdd(false);
         }
-    };
-    const handleAdd = () => {
-        setView(false);
-        setAdd(true);
-        setEdit(false);
     };
     const handleCancel = () => {
         setView(true);
@@ -293,7 +312,10 @@ const Paciente = () => {
             cui: "",
             numero_telefono: "",
             fecha_inscripcion: "",
-            fk_id_lugares: ""
+            fk_id_lugares: "",
+            fecha_probable_parto: "",
+            primer_control_post_parto: "",
+            segundo_control_post_parto: ""
         });
     };
 
@@ -308,14 +330,14 @@ const Paciente = () => {
                     {view && (
                         <div>
 
-                            <AlertDialogDeleteConsultaGeneral
+                            <AlertDialogDeletePrenatal
                                 open={openDeleteDialog}
                                 id={selectedId}
                                 onCancel={() => setOpenDeleteDialog(false)}
                                 onConfirm={(msg) => {
                                     setOpenDeleteDialog(false);
                                     showAlert('success', msg || 'Usuario eliminado correctamente');
-                                    obttenerPaciente(busqueda);
+                                    obtenerPaciente(busqueda);
                                 }}
                             />
 
@@ -340,11 +362,9 @@ const Paciente = () => {
                                     </nav>
 
                                 </form>
-
                             </section>
 
                             <section className="tabla--responsiva">
-
                                 <table>
                                     <thead>
                                         <tr>
@@ -358,14 +378,17 @@ const Paciente = () => {
                                             <th>Teléfono</th>
                                             <th>Inscripción</th>
                                             <th>Lugar</th>
+                                            <th>Fecha Parto</th>
+                                            <th>Primer contro</th>
+                                            <th>Segundo contro</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {isLoading ? (
-                                            <tr><td colSpan="10" style={{ textAlign: 'center', padding: '1rem' }}>Cargando…</td></tr>
+                                            <tr><td colSpan="14" style={{ textAlign: 'center', padding: '1rem' }}>Cargando…</td></tr>
                                         ) : (paciente?.length ?? 0) === 0 ? (
-                                            <tr><td colSpan="10" style={{ textAlign: 'center', padding: '1rem' }}>No se encontraron pacientes</td></tr>
+                                            <tr><td colSpan="14" style={{ textAlign: 'center', padding: '1rem' }}>No se encontraron pacientes</td></tr>
                                         ) : (
                                             paciente.map((p, i) => (
                                                 <tr key={p.id_paciente ?? i}>
@@ -379,6 +402,9 @@ const Paciente = () => {
                                                     <td>{p.numero_telefono}</td>
                                                     <td>{formatDate(p.fecha_inscripcion)}</td>
                                                     <td>{p.lugar}</td>
+                                                    <td>{formatDate(p.fecha_probable_parto)}</td>
+                                                    <td>{formatDate(p.primer_control_post_parto)}</td>
+                                                    <td>{formatDate(p.segundo_control_post_parto)}</td>
                                                     <td>
 
                                                         <Tooltip title="Editar">
@@ -399,7 +425,6 @@ const Paciente = () => {
                                     </tbody>
                                 </table>
                             </section>
-
                         </div>
                     )}
 
@@ -491,7 +516,6 @@ const Paciente = () => {
                                             name="numero_telefono"
                                             value={formPaciente.numero_telefono}
                                             onChange={handleChange}
-                                            required
                                         />
                                     </section>
 
@@ -510,6 +534,37 @@ const Paciente = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="fecha_probable_parto">Fecha Parto:</label>
+                                        <input
+                                            type="date"
+                                            name="fecha_probable_parto"
+                                            value={formPaciente.fecha_probable_parto}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="primer_control_post_parto">Primer Control:</label>
+                                        <input
+                                            type="date"
+                                            name="primer_control_post_parto"
+                                            value={formPaciente.primer_control_post_parto}
+                                            onChange={handleChange}
+                                        />
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="segundo_control_post_parto">Segundo control:</label>
+                                        <input
+                                            type="date"
+                                            name="segundo_control_post_parto"
+                                            value={formPaciente.segundo_control_post_parto}
+                                            onChange={handleChange}
+                                        />
                                     </section>
 
                                     <section className="button--option">
@@ -626,7 +681,6 @@ const Paciente = () => {
                                             name="numero_telefono"
                                             value={formPaciente.numero_telefono}
                                             onChange={handleChange}
-                                            required
                                         />
                                     </section>
 
@@ -658,12 +712,44 @@ const Paciente = () => {
                                         </select>
                                     </section>
 
+                                    <section className="card--form">
+                                        <label name="fecha_probable_parto">Fecha Parto:</label>
+                                        <input
+                                            type="date"
+                                            name="fecha_probable_parto"
+                                            value={formPaciente.fecha_probable_parto}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="primer_control_post_parto">Primer Control:</label>
+                                        <input
+                                            type="date"
+                                            name="primer_control_post_parto"
+                                            value={formPaciente.primer_control_post_parto}
+                                            onChange={handleChange}
+                                            
+                                        />
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="segundo_control_post_parto">Segundo control:</label>
+                                        <input
+                                            type="date"
+                                            name="segundo_control_post_parto"
+                                            value={formPaciente.segundo_control_post_parto}
+                                            onChange={handleChange}
+                                        />
+                                    </section>
+
                                     <section className="button--option">
                                         <button type="button" onClick={handleCancel}>
                                             Cancelar
                                         </button>
                                         <button type="submit">
-                                            agregar usuario
+                                            agregar paciente
                                         </button>
                                     </section>
 
@@ -690,6 +776,4 @@ const Paciente = () => {
     )
 }
 
-
-
-export default Paciente;
+export default Prenatal;

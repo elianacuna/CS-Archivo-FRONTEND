@@ -7,6 +7,7 @@ import Login from "./routes/auth/login";
 import Ajustes from "./routes/ajustes/ajustes.jsx";
 import Niños from "./routes/niños/niños.jsx";
 import Paciente from "./routes/pacientes/pacientes.jsx";
+import Prenatal from "./routes/prenatal/prenatal.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
@@ -43,10 +44,17 @@ function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="/pacientes"
+        <Route path="/pacientes"
           element={
             <ProtectedRoute>
               <Paciente />
+            </ProtectedRoute>
+          } />
+
+        <Route path="/prenatal"
+          element={
+            <ProtectedRoute>
+              <Prenatal />
             </ProtectedRoute>
           } />
 
