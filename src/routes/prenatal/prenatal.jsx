@@ -6,6 +6,8 @@ import Loading from '../../components/Loading.jsx';
 import AlertDialogDelete from "../../components/dialog/AlertDialogDelete.jsx";
 import { Menu, MenuItem } from '@mui/material';
 import AlertDialogDeletePrenatal from '../../components/dialog/AlertDialogDeletePrenatal.jsx';
+import { generarPDF } from "../../components/PDF/PrenatalPDF.jsx";
+
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import '../../styles/global.css';
 import '../../styles/usuario.css';
@@ -288,7 +291,7 @@ const Prenatal = () => {
             const fechaPrimer = prenatal.primer_control_post_parto
                 ? new Date(prenatal.primer_control_post_parto).toISOString().split("T")[0]
                 : "";
-            
+
             const fechaSegundo = prenatal.segundo_control_post_parto
                 ? new Date(prenatal.segundo_control_post_parto).toISOString().split("T")[0]
                 : "";
@@ -432,6 +435,12 @@ const Prenatal = () => {
                                                         <Tooltip title="Delete">
                                                             <IconButton color="error" onClick={() => { deleteUsuario(p.id_paciente) }}>
                                                                 <DeleteIcon />
+                                                            </IconButton>
+                                                        </Tooltip>
+
+                                                        <Tooltip title="PDF">
+                                                            <IconButton color="primary" onClick={() => { generarPDF(p.id_paciente) }}>
+                                                                <PictureAsPdfIcon />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </td>

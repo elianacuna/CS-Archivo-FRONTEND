@@ -6,6 +6,7 @@ import Loading from '../../components/Loading.jsx';
 import AlertDialogDelete from "../../components/dialog/AlertDialogDelete.jsx";
 import { Menu, MenuItem } from '@mui/material';
 import AlertDialogDeleteConsultaGeneral from '../../components/dialog/AlertDialogDeleteConsulta.jsx';
+import { generarPDF } from "../../components/PDF/ConsultaGeneralPDF.jsx";
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +14,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import '../../styles/global.css';
 import '../../styles/usuario.css';
@@ -73,7 +75,6 @@ const Paciente = () => {
         if (respone.ok) {
             const data = await respone.json();
             setPaciente(data.consultageneral);
-            console.table(data.consultageneral);
             return true;
         } else {
             const data = await respone.json();
@@ -262,7 +263,7 @@ const Paciente = () => {
                 ? new Date(consultageneral.fecha_nacimiento).toISOString().split("T")[0]
                 : "";
 
-            
+
             setFormPaciente({
                 id_paciente: consultageneral.id_paciente,
                 num_expediente: consultageneral.num_expediente,
@@ -397,6 +398,11 @@ const Paciente = () => {
                                                         <Tooltip title="Delete">
                                                             <IconButton color="error" onClick={() => { deleteUsuario(p.id_paciente) }}>
                                                                 <DeleteIcon />
+                                                            </IconButton>
+                                                        </Tooltip>
+                                                        <Tooltip title="PDF">
+                                                            <IconButton color="primary" onClick={() => { generarPDF(p.id_paciente) }}>
+                                                                <PictureAsPdfIcon />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </td>

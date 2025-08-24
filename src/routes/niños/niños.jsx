@@ -6,17 +6,20 @@ import Loading from '../../components/Loading.jsx';
 import AlertDialogDelete from "../../components/dialog/AlertDialogDelete.jsx";
 import { Menu, MenuItem } from '@mui/material';
 import AlertDialogDeletNiño from '../../components/dialog/AlertDialogDeleteNiño.jsx';
+import { generarPDF  } from "../../components/PDF/NiñosPDF.jsx";
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 
 import '../../styles/global.css';
 import '../../styles/usuario.css';
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const Niños = () => {
     {/* Variables */ }
@@ -229,7 +232,7 @@ const Niños = () => {
         setSelectedId(id);
         setOpenDeleteDialog(true);
     };
-
+    
 
     {/* editar, agregar o eliminar */ }
     const calcularEdad = (isoDate) => {
@@ -429,6 +432,12 @@ const Niños = () => {
                                                         <Tooltip title="Delete">
                                                             <IconButton color="error" onClick={() => { deleteUsuario(n.id_paciente) }}>
                                                                 <DeleteIcon />
+                                                            </IconButton>
+                                                        </Tooltip>
+
+                                                        <Tooltip title="PDF">
+                                                            <IconButton color="primary" onClick={() => { generarPDF(n.id_paciente) }}>
+                                                                <PictureAsPdfIcon />
                                                             </IconButton>
                                                         </Tooltip>
                                                     </td>
