@@ -182,7 +182,7 @@ export const generarPDF = async (id) => {
     try {
       // Mejor PNG/JPG que SVG en PDF
       // Ajusta la ruta real (assets vs assest)
-      const pngLogo = new URL("../assest/logo.svg", import.meta.url).toString();
+      const pngLogo = new URL("../../assest/logo.svg", import.meta.url).toString();
       logoSrc = pngLogo;
     } catch {
       logoSrc = null;
