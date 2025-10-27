@@ -55,8 +55,8 @@ const Login = () => {
 
                 showAlert('success', `${data.message}`);
 
-                sessionStorage.setItem('id', usuario.id);
-                localStorage.setItem('id', usuario.id);
+                sessionStorage.setItem('id_usuario', usuario.id);
+                localStorage.setItem('id_usuario', usuario.id);
                 localStorage.setItem('username', usuario.username ?? '');
                 localStorage.setItem('email', usuario.email ?? '');
 
