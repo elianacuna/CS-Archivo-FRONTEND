@@ -39,7 +39,8 @@ const Prenatal = () => {
         numero_telefono: "",
         fecha_inscripcion: "",
         fk_id_lugares: "",
-        fecha_probable_parto: "",
+        ultima_regla: "",
+        probable_parto: "",
         primer_control_post_parto: "",
         segundo_control_post_parto: ""
     });
@@ -103,8 +104,8 @@ const Prenatal = () => {
         const {
             num_expediente, nombre_completo, direccion_exacta, edad,
             fecha_nacimiento, cui, numero_telefono, fecha_inscripcion,
-            fk_id_lugares, primer_control_post_parto, segundo_control_post_parto,
-            fecha_probable_parto
+            fk_id_lugares, ultima_regla, probable_parto, primer_control_post_parto, 
+            segundo_control_post_parto
         } = formPaciente;
 
         setIsLoading(true);
@@ -115,7 +116,7 @@ const Prenatal = () => {
                 body: JSON.stringify({
                     num_expediente, nombre_completo, direccion_exacta,
                     edad, fecha_nacimiento, cui, numero_telefono,
-                    fecha_inscripcion, fk_id_lugares, fecha_probable_parto,
+                    fecha_inscripcion, fk_id_lugares, ultima_regla, probable_parto,
                     primer_control_post_parto, segundo_control_post_parto
                 })
             });
@@ -136,7 +137,8 @@ const Prenatal = () => {
                         numero_telefono: "",
                         fecha_inscripcion: "",
                         fk_id_lugares: "",
-                        fecha_probable_parto: "",
+                        ultima_regla: "",
+                        probable_parto: "",
                         primer_control_post_parto: "",
                         segundo_control_post_parto: ""
                     });
@@ -165,8 +167,9 @@ const Prenatal = () => {
     const updatePaciente = async () => {
         const {
             id_paciente, num_expediente, nombre_completo, direccion_exacta, edad,
-            fecha_nacimiento, cui, numero_telefono, fk_id_lugares, fecha_probable_parto,
-            primer_control_post_parto, segundo_control_post_parto
+            fecha_nacimiento, cui, numero_telefono, fk_id_lugares, ultima_regla,
+            probable_parto, primer_control_post_parto, 
+            segundo_control_post_parto
         } = formPaciente;
 
         setIsLoading(true);
@@ -178,7 +181,7 @@ const Prenatal = () => {
                 body: JSON.stringify({
                     num_expediente, nombre_completo, direccion_exacta,
                     edad, fecha_nacimiento, cui, numero_telefono,
-                    fk_id_lugares, fecha_probable_parto,
+                    fk_id_lugares, ultima_regla, probable_parto,
                     primer_control_post_parto, segundo_control_post_parto
                 })
             });
@@ -199,7 +202,8 @@ const Prenatal = () => {
                         numero_telefono: "",
                         fecha_inscripcion: "",
                         fk_id_lugares: "",
-                        fecha_probable_parto: "",
+                        ultima_regla: "",
+                        probable_parto: "",
                         primer_control_post_parto: "",
                         segundo_control_post_parto: ""
                     });
@@ -306,7 +310,8 @@ const Prenatal = () => {
                 cui: prenatal.cui,
                 numero_telefono: prenatal.numero_telefono,
                 fk_id_lugares: prenatal.fk_id_lugares,
-                fecha_probable_parto: fechaParto,
+                ultima_regla: prenatal.ultima_regla,
+                probable_parto: prenatal.probable_parto,
                 primer_control_post_parto: fechaPrimer,
                 segundo_control_post_parto: fechaSegundo
             });
@@ -332,7 +337,8 @@ const Prenatal = () => {
             numero_telefono: "",
             fecha_inscripcion: "",
             fk_id_lugares: "",
-            fecha_probable_parto: "",
+            ultima_regla: "",
+            probable_parto: "",
             primer_control_post_parto: "",
             segundo_control_post_parto: ""
         });
@@ -397,7 +403,8 @@ const Prenatal = () => {
                                             <th>Teléfono</th>
                                             <th>Inscripción</th>
                                             <th>Lugar</th>
-                                            <th>Fecha Parto</th>
+                                            <th>FUR</th>
+                                            <th>FPP</th>
                                             <th>Primer contro</th>
                                             <th>Segundo contro</th>
                                             <th></th>
@@ -421,7 +428,8 @@ const Prenatal = () => {
                                                     <td>{p.numero_telefono}</td>
                                                     <td>{formatDate(p.fecha_inscripcion)}</td>
                                                     <td>{p.lugar}</td>
-                                                    <td>{formatDate(p.fecha_probable_parto)}</td>
+                                                    <td>{formatDate(p.ultima_regla)}</td>
+                                                    <td>{formatDate(p.probable_parto)}</td>
                                                     <td>{formatDate(p.primer_control_post_parto)}</td>
                                                     <td>{formatDate(p.segundo_control_post_parto)}</td>
                                                     <td>
@@ -738,11 +746,22 @@ const Prenatal = () => {
                                     </section>
 
                                     <section className="card--form">
-                                        <label name="fecha_probable_parto">Fecha Parto:</label>
+                                        <label name="ultima_regla">FUR:</label>
                                         <input
                                             type="date"
-                                            name="fecha_probable_parto"
-                                            value={formPaciente.fecha_probable_parto}
+                                            name="ultima_regla"
+                                            value={formPaciente.ultima_regla}
+                                            onChange={handleChange}
+                                            required
+                                        />
+                                    </section>
+
+                                    <section className="card--form">
+                                        <label name="probable_parto">FPP:</label>
+                                        <input
+                                            type="date"
+                                            name="probable_parto"
+                                            value={formPaciente.probable_parto}
                                             onChange={handleChange}
                                             required
                                         />

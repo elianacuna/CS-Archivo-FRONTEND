@@ -84,7 +84,8 @@ const PrenatalPDFDoc = ({ data, logoSrc }) => {
     numero_telefono,
     fecha_inscripcion,
     lugar,
-    fecha_probable_parto,
+    ultima_regla,
+    probable_parto,
     primer_control_post_parto,
     segundo_control_post_parto
   } = data || {};
@@ -118,9 +119,13 @@ const PrenatalPDFDoc = ({ data, logoSrc }) => {
               <Text style={styles.label}>Nombre completo</Text>
               <Text style={styles.value}>{nombre_completo || "-"}</Text>
             </View>
+            <View style={styles.field}>
+              <Text style={styles.label}>FUR</Text>
+              <Text style={styles.value}>{fmtDate(ultima_regla)}</Text>
+            </View>
              <View style={styles.field}>
-              <Text style={styles.label}>Fecha problable del Parto</Text>
-              <Text style={styles.value}>{fmtDate(fecha_probable_parto)}</Text>
+              <Text style={styles.label}>FPP</Text>
+              <Text style={styles.value}>{fmtDate(probable_parto)}</Text>
             </View>
             <View style={styles.field}>
               <Text style={styles.label}>Fecha Primer control post parto</Text>

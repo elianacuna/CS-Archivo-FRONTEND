@@ -20,7 +20,8 @@ const HEADERS = [
   "Fecha de inscripción",
   "Lugar",
   "fk_id_lugares",
-  "Fecha probable de parto",
+  "FUR",
+  "FPP",
   "Primer control post parto",
   "Segundo control post parto",
 ];
@@ -37,7 +38,8 @@ const mapRow = (r = {}) => ([
   toDate(r.fecha_inscripcion),
   r.lugar ?? "",
   r.fk_id_lugares ?? "",
-  toDate(r.fecha_probable_parto),
+  toDate(r.ultima_regla),
+  toDate(r.probable_parto),
   toDate(r.primer_control_post_parto),
   toDate(r.segundo_control_post_parto),
 ]);
